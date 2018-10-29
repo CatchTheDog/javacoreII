@@ -1,7 +1,6 @@
 package com.java.core.chapter1.lamda;
 
 import org.junit.jupiter.api.Test;
-import org.junit.platform.commons.util.CollectionUtils;
 
 import java.util.*;
 
