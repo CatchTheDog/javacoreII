@@ -6,6 +6,8 @@ import java.util.*;
 
 /**
  * lamda表达式测试
+ * 方法引用
+ *
  */
 public class Student {
     private String name;

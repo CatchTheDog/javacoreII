@@ -1,11 +1,13 @@
 package com.java.core.chapter2;
 
-import java.nio.charset.Charset;
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class Test {
     public static void main(String [] args){
-        Charset cset = Charset.forName("ISO-8859-1");
-        cset.aliases().stream().forEach(x->System.out.println(x));
-        cset.availableCharsets().forEach((key,value) ->System.out.println("key:"+key+",value:"+value));
+        String [] words = {"Hello","world"};
+        List<String> a = Arrays.stream(words).map(word -> word.split("")).flatMap(Arrays::stream).collect(Collectors.toList());
+        a.forEach(x -> System.out.println(x));
     }
 }
