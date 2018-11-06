@@ -1,0 +1,17 @@
+1.日志记录器具有层次结构；如果设置上层包日志级别后，下层包的子记录器也会从父记录器中继承此日志级别。
+2.日志记录器界别：
+    SEVERE
+    WARNING
+    INFO
+    CONFIG
+    FINE
+    FINER
+    FINEST
+
+  使用Level.ALL开启所有级别，使用Level.OFF关闭所有级别记录。
+  对于所有级别有以下几种记录方法：
+    logger.warning(message);
+    logger.fine(message);
+  使用log方法指定级别：
+    logger.log(Level.FINE,message);
+  默认情况下只会记录INFO或者更高级别的日志，若向要记录更低级别的日志，需要修改配置。

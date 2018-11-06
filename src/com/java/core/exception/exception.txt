@@ -1,0 +1,66 @@
+1.异常分类：
+    受查异常：除非受查异常外的其他所有异常。
+    非受查异常：派生与Error类或RuntimeException类的所有异常。
+2.编译器会检查程序是否为所有受查异常提供了异常处理器。
+3.不应在方法声明中抛出非受查异常（throws）
+4.若在子类中覆盖了超类的一个方法，子类方法中声明的受查异常不能比超类方法中声明的异常更通用——子类可以抛出更特定的异常，或者不抛出异常
+  若超类方法没有抛出任何受查异常，子类也不能抛出任何受查异常。
+5.对于当前方法中抛出的异常，若知道怎样处理，则可以进行处理；若不知道怎样处理，则可以直接将异常抛出给调用方，让调用方处理；
+6.若一个模块抛出的异常对外部调用程序来说具有多种含义，则可以在catch此异常后，重新构造异常，再次抛出异常给调用方，调用方通过异常中所携带的异常信息可以了解异常的原因。
+    try{
+        access the database;
+    }catch(SQLException e){
+        throw new ServletException("database error:" + e.getMessage());
+    }
+
+    下面的方法更好：可以让用户抛出子系统中的高级异常，而不会丢失原始异常的细节：
+    try{
+        access the database;
+    }catch(SQLException e){
+        Throwable se = new ServletException("database error");
+        se.initCause(e);
+        throw se;
+    }
+
+    调用方捕获到异常后，就可以使用如下语句重新得到原始异常：
+    Throwable e = se.getCause();
+ 7.在使用如下形式时，首先执行try块，然后检查异常，再执行catch块，最后执行finaly块，最后继续向下执行。
+    try{
+
+    }catch{
+
+    }finally{
+
+    }
+ 8.建议将上述结构进行解耦
+    InputStrean in = . . .;
+    try
+    {
+        try
+        {
+            code that might throw exceptions
+        }
+        finally
+        {
+            in.doseO;
+        }
+    }
+    catch (IOException e)
+    {
+        show error message
+    }
+ 9.当finally子句包含return语句时，返回前，finally子句的内容将被执行，而且finally子句中的返回值将覆盖原始（try块中）返回值
+ 10.对于打开资源并需要在finally子句中关闭的代码，如果try块中抛出了原始异常，而在finally子句中关闭资源时也抛出了异常，则finally子句中抛出的异常
+    会覆盖原始异常。
+ 11.带资源的try块可以解决上述问题——原始异常会被抛出，而资源关闭时异常会自动被addSuppresessed()方法抑制；如果需要查看此异常，可以使用getSuppressed()方法获取被
+    抑制的异常列表。
+    AutoCloseable接口资源自动关闭
+    try (Resource res = . . .)
+    {
+        work with res
+    }
+ 12.分析堆栈轨迹元素
+    Throwable:
+        printStackTrace()  打印当前线程的堆栈轨迹
+        getStackTrace()   获取当前线程的堆栈轨迹数组
+    Thread.getAllStackTrace() 产生所有线程的堆栈轨迹
