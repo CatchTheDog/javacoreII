@@ -2,43 +2,35 @@ package com.java.core.guiprogram;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.font.FontRenderContext;
+import java.awt.geom.Line2D;
+import java.awt.geom.Rectangle2D;
 
 /**
  * @author Mr.X
- * @since 1.0.0 2018/11/9 17:11
- * 在框架中添加组件，显示消息
+ * @version 1.0.0
+ * @since 2018/11/12 10:23
  */
-public class NotHelloWorld {
-
+public class FontTest {
     public static void main(String[] args) {
         EventQueue.invokeLater(() -> {
-            JFrame frame = new NotHelloWorldFrame();
-            frame.setTitle("NotHelloWorld");
-            frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-            frame.setVisible(true
-
-
-            );
+            JFrame jFrame = new FontFrame();
+            jFrame.setTitle("FontTest");
+            jFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+            jFrame.setVisible(true);
         });
     }
 
-
 }
 
-/**
- * A Frame that contains a message panel
- */
-class NotHelloWorldFrame extends JFrame {
-    public NotHelloWorldFrame() {
-        add(new NotHelloWorldComponent());
+class FontFrame extends JFrame {
+    public FontFrame() {
+        add(new FontComponent());
         pack();
     }
 }
 
-class NotHelloWorldComponent extends JComponent {
-    public static final int MESSAGE_X = 75;
-    public static final int MESSAGE_Y = 100;
-
+class FontComponent extends JComponent {
     private static final int DEFAULT_WIDTH = 300;
     private static final int DEFAULT_HEIGHT = 200;
 
@@ -68,11 +60,42 @@ class NotHelloWorldComponent extends JComponent {
      * another transform.
      *
      * @param g the <code>Graphics</code> object to protect
+     * @see #paint
      * @see ComponentUI
      */
     @Override
     protected void paintComponent(Graphics g) {
-        g.drawString("Not a Hello, World program", MESSAGE_X, MESSAGE_Y);
+        Graphics2D graphics2D = (Graphics2D) g;
+        String message = "Good Morning!";
+
+        Font f = new Font("Serif", Font.BOLD, 36);
+        graphics2D.setFont(f);
+
+        //measure the size of the message
+
+        FontRenderContext context = graphics2D.getFontRenderContext();
+        Rectangle2D bounds = f.getStringBounds(message, context);
+
+        //set(x,y) = top left corner of text
+
+        double x = (getWidth() - bounds.getWidth()) / 2;
+        double y = (getHeight() - bounds.getHeight()) / 2;
+
+        //add ascent to y to reach the baseline
+
+        double ascent = -bounds.getY();
+        double baseY = y + ascent;
+
+        //draw the message
+        graphics2D.drawString(message, (int) x, (int) baseY);
+        graphics2D.setPaint(Color.LIGHT_GRAY);
+
+        //draw the baseline
+        graphics2D.draw(new Line2D.Double(x, baseY, x + bounds.getWidth(), baseY));
+
+        //draw the enclosing rectangle
+        Rectangle2D rect = new Rectangle2D.Double(x, y, bounds.getWidth(), bounds.getHeight());
+        graphics2D.draw(rect);
     }
 
     /**
