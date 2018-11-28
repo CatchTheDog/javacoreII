@@ -46,7 +46,7 @@ class DrawFrame extends JFrame {
     public DrawFrame() {
         //多次调用add方法，覆盖
         add(new DrawComponent());
-        add(new TextComponent());
+        //add(new TextComponent());
         pack();
     }
 }
