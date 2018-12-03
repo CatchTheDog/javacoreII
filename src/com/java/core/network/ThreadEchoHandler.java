@@ -26,7 +26,7 @@ public class ThreadEchoHandler implements Runnable {
             while (!done && in.hasNextLine()) {
                 String line = in.nextLine();
                 out.println(line);
-                if (line.equals("BYE")) {
+                if (line.trim().equals("BYE")) {
                     done = true;
                 }
             }
