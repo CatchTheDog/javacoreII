@@ -14,8 +14,6 @@ import java.awt.event.ActionListener;
  * fill:如果不希望组件拉伸至整个区域，则使用fill约束；四个有效值：GridBagConstraints.NONE,GridBagConstraints.HORIZONTAL,GridBagConstraints.VERTICAL,GridBagConstraints.BOTH
  * anchor:若组件没有填充整个区域，可以通过anchor域指定其位置：GridBagConstraints.CENTER,GridBagConstraints.NORTH,GridBagConstraints.NORTHEAST,GridBagConstraints.EAST
  * insets:可以通过设置insets域在组件周围增加附件的空白区域
- *
- *
  */
 public class LayoutFrame extends JFrame {
     public static final int TEXT_ROWS = 10;
