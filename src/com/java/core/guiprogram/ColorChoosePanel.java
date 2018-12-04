@@ -34,6 +34,9 @@ public class ColorChoosePanel extends JPanel {
             JPanel preview = new JPanel();
             preview.setBackground(null);
             frame.add(preview, BorderLayout.CENTER);
+            //为frame中所有组件的事件添加事件跟踪器
+            EventTrace tracer = new EventTrace();
+            tracer.add(frame);
             frame.setTitle("ColorChoosePanel");
             frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
             frame.setVisible(true);

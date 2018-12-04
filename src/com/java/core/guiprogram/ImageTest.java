@@ -13,7 +13,9 @@ import java.net.URL;
 public class ImageTest {
     public static void main(String[] args) {
         EventQueue.invokeLater(() -> {
-            JFrame jFrame = new ImageFrame();
+            URL url = ImageTest.class.getResource("blue-ball.gif");
+            Image image = new ImageIcon(url).getImage();
+            JFrame jFrame = new ImageFrame(image);
             jFrame.setTitle("ImageTest");
             jFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
             jFrame.setVisible(true);
@@ -22,8 +24,8 @@ public class ImageTest {
 }
 
 class ImageFrame extends JFrame {
-    public ImageFrame() {
-        add(new ImageComponent());
+    public ImageFrame(Image image) {
+        add(new ImageComponent(image));
         pack();
     }
 }
@@ -34,9 +36,10 @@ class ImageComponent extends JComponent {
 
     private Image image;
 
-    public ImageComponent() {
-        URL url = getClass().getResource("blue-ball.gif");
-        this.image = new ImageIcon(url).getImage();
+    public ImageComponent(Image image) {
+//        URL url = getClass().getResource("blue-ball.gif");
+//        this.image = new ImageIcon(url).getImage();
+        this.image = image;
     }
 
     /**
@@ -66,7 +69,6 @@ class ImageComponent extends JComponent {
      *
      * @param g the <code>Graphics</code> object to protect
      * @see #paint
-     * @see ComponentUI
      */
     @Override
     protected void paintComponent(Graphics g) {
@@ -97,7 +99,6 @@ class ImageComponent extends JComponent {
      *
      * @return the value of the <code>preferredSize</code> property
      * @see #setPreferredSize
-     * @see ComponentUI
      */
     @Override
     public Dimension getPreferredSize() {
