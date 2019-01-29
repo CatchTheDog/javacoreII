@@ -13,7 +13,7 @@ import java.util.concurrent.locks.ReentrantLock;
  * @version 1.0.0
  * @since 2018/12/10 16:20
  */
-public class Bank {
+public class Bank_Lock {
     /**
      * 使用数组模拟银行账户，索引值为银行账号代码，对应位置上的元素为银行账户余额
      */
@@ -27,7 +27,7 @@ public class Bank {
      */
     private Condition sufficientFunds;
 
-    public Bank(int n, double initialBalance) {
+    public Bank_Lock(int n, double initialBalance) {
         accounts = new double[n];
         Arrays.fill(accounts, initialBalance);
         bankLock = new ReentrantLock();

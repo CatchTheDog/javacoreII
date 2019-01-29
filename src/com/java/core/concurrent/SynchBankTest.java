@@ -5,7 +5,8 @@ public class SynchBankTest {
     public static void main(String[] args) {
         int size = 100;
         int initial = 1000;
-        Bank bank = new Bank(size, initial);
+        //Bank_Lock bank = new Bank_Lock(size, initial);
+        Bank_Synchronized bank = new Bank_Synchronized(size, initial);
         while (true) {
             new Thread(() -> {
                 int from = (int) (size * Math.random());
