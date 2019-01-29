@@ -4,7 +4,7 @@ package com.java.core.concurrent;
 public class SynchBankTest {
     public static void main(String[] args) {
         int size = 100;
-        int initial = 100;
+        int initial = 1000;
         Bank bank = new Bank(size, initial);
         while (true) {
             new Thread(() -> {

@@ -14,8 +14,17 @@ import java.util.concurrent.locks.ReentrantLock;
  * @since 2018/12/10 16:20
  */
 public class Bank {
+    /**
+     * 使用数组模拟银行账户，索引值为银行账号代码，对应位置上的元素为银行账户余额
+     */
     private final double[] accounts;
+    /**
+     * 锁，用于对转账操作进行同步
+     */
     private Lock bankLock;
+    /**
+     * 锁条件对象——条件变量，用于对转账金额的大小检查（确保在转账后账户余额不会出现负值）以保证余额充足
+     */
     private Condition sufficientFunds;
 
     public Bank(int n, double initialBalance) {
@@ -25,6 +34,14 @@ public class Bank {
         sufficientFunds = bankLock.newCondition();
     }
 
+    /**
+     * 转账操作
+     *
+     * @param from   转出账户代码
+     * @param to     转入账户代码
+     * @param amount 转账金额
+     * @throws InterruptedException 线程执行中断时抛出
+     */
     public void transfer(int from, int to, double amount) throws InterruptedException {
         bankLock.lock();
         try {
@@ -34,13 +51,17 @@ public class Bank {
             accounts[from] -= amount;
             System.out.printf(" %10.2f from %d to %d,", amount, from, to);
             accounts[to] += amount;
-            System.out.printf(" Total Balance:%10.2f%n", getTotalBalance());
-            sufficientFunds.signalAll(); //唤醒因为此条件对象而阻塞的所有线程
+            System.out.printf(" Total Balance:%10.2f%n", getTotalBalance()); //此处使用了锁的可重入属性
+            sufficientFunds.signalAll(); //此次转账完成，唤醒其它因为此条件对象而阻塞的所有线程
         } finally {
-            bankLock.unlock();
+            bankLock.unlock(); //在此处释放锁，需要放入finally中，即使抛出异常也需要将锁释放，否则其他线程此后永远无法进入此方法
         }
     }
 
+    /**
+     * 获取银行所有账户总余额
+     * @return 银行所有账户总余额
+     */
     public double getTotalBalance() {
         bankLock.lock();
         try {
