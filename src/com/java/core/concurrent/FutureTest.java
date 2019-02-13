@@ -55,7 +55,7 @@ class MatchCounter implements Callable<Integer> {
 
     @Override
     public Integer call() throws Exception {
-        int count = 0;
+        int count = 0; //此处count变量处于栈上，不存在多线程竞争修改变量问题。
         try {
             File[] files = directory.listFiles();
             List<Future<Integer>> results = new ArrayList<>();
