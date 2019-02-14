@@ -1,4 +1,4 @@
-package com.java.core.chapter2;
+package com.java.core.stream;
 
 import java.util.Arrays;
 import java.util.List;

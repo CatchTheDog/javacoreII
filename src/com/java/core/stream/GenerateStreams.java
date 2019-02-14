@@ -1,4 +1,4 @@
-package com.java.core.chapter1;
+package com.java.core.stream;
 
 import org.junit.jupiter.api.Test;
 

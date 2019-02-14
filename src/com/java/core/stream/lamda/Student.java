@@ -1,8 +1,11 @@
-package com.java.core.chapter1.lamda;
+package com.java.core.stream.lamda;
 
 import org.junit.jupiter.api.Test;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
 
 /**
  * lamda表达式测试

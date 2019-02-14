@@ -1,8 +1,7 @@
-package com.java.core.chapter1;
+package com.java.core.stream;
 
 import java.util.*;
 import java.util.function.Function;
-import java.util.stream.Collector;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 

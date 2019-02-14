@@ -16,6 +16,14 @@ import java.util.concurrent.*;
  * newScheduledThreadPool 预定执行任务的固定线程池
  * newSingleThreadScheduledExecutor 预定执行任务的单线程池
  *
+ * shutdown()
+ * shutdownNow() 取消所有任务
+ * invokeAny()
+ * invokeAll()
+ * 使用ExecutorCompletionService 来组织任务的排列集合
+ *
+ * Fork-Join框架实现并行计算 RecursiveTask<V> compute() 实现
+ *
  * @author Mr.X
  * @version 1.0.0
  * @since 2019/02/13 17:12
