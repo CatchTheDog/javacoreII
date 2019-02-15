@@ -23,6 +23,8 @@ import java.util.Set;
  * PrintWriter 以文本格式打印字符串和数字
  * Scanner 读入文本,数字等
  * BufferedReader 读入文本
+ * DataOutput 以二进制格式写数组、字符、布尔值已经字符串
+ * DataInput  读取二进制
  * @since 2019/02/14 14:33
  */
 public class IOTest {
