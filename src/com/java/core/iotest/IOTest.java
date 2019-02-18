@@ -6,6 +6,8 @@ import java.nio.CharBuffer;
 import java.nio.charset.Charset;
 import java.util.Map;
 import java.util.Set;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipInputStream;
 
 /**
  * Java IO 测试
@@ -28,13 +30,14 @@ import java.util.Set;
  * @since 2019/02/14 14:33
  */
 public class IOTest {
-    public static void main(String[] args) throws FileNotFoundException {
-        PrintWriter writer = new PrintWriter(System.out);
-        writer.print("1234xyz");
-        writer.close();
+    public static void main(String[] args) throws IOException {
+        PrintWriter writer = new PrintWriter(System.out, true);
+        writer.println("1234xyz");
+        writer.flush();
+        //writer.close(); //不可在此处关闭流，若在此处关闭流之后，其后所有到标准输出流的输出都无效，因为从底层中调用了Systme.out.close(); 但是代码在执行时不会有异常
         PrintWriter bos = new PrintWriter(new OutputStreamWriter(new FileOutputStream(new File("C:\\马俊强\\testio.txt"))), true);
         bos.print(123);
-        bos.print('a');
+        bos.print(1);
         bos.print(1234L);
         bos.print(false);
         bos.print(1.23);
@@ -43,8 +46,9 @@ public class IOTest {
         Charset charset = Charset.forName("ISO-8859-1");
         Set<String> aliases = charset.aliases();
         for (String aliase : aliases) {
-            System.out.println(aliase);
+            System.out.print(" " + aliase);
         }
+        System.out.println();
         //使用指定的字符集对字符进行编码
         String str = "nihaoa";
         ByteBuffer buffer = charset.encode(str);
@@ -57,7 +61,34 @@ public class IOTest {
 
         Map<String, Charset> charsets = Charset.availableCharsets();
         for (String name : charsets.keySet()) {
-            System.out.println(name);
+            System.out.print(" " + name);
         }
+        System.out.println();
+        PushbackInputStream pushbackInputStream = new PushbackInputStream(new BufferedInputStream(new FileInputStream(new File("C:\\马俊强\\testio.txt"))), 1024);
+        byte[] bytes1 = new byte[8];
+        pushbackInputStream.read(bytes1);
+        if (new String(bytes1, "utf-8").equals("123a1234")) {
+            pushbackInputStream.unread(bytes1); //跳过部分数据
+        }
+        pushbackInputStream.read(bytes1); //重新读取数据,PushbackInputStream 缓冲区默认大小是1字节，可以在构造函数中指定缓冲区大小
+        System.out.println(new String(bytes1));
+        pushbackInputStream.close();
+        //如何回推一个double
+        DataInputStream din = new DataInputStream(pushbackInputStream = new PushbackInputStream(new BufferedInputStream(new FileInputStream("C:\\马俊强\\testio.txt")), 1024));
+        double d = din.readDouble();
+        byte[] doubleAsBytes = new byte[8];
+        ByteBuffer.wrap(doubleAsBytes).putDouble(d);
+        pushbackInputStream.unread(doubleAsBytes);
+        double d1 = din.readDouble(); //12311234false1.23
+        System.out.println(d1);
+        System.out.println(d);
+
+        //未正确读取到压缩文件
+        ZipInputStream zipInputStream = new ZipInputStream(new FileInputStream("C:\\马俊强\\testio.zip"));
+        ZipEntry entry;
+        while ((entry = zipInputStream.getNextEntry()) != null) {
+            System.out.println(entry.getCompressedSize());
+        }
+        writer.close();
     }
 }
