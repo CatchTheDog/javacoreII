@@ -86,9 +86,26 @@ public class IOTest {
         //未正确读取到压缩文件
         ZipInputStream zipInputStream = new ZipInputStream(new FileInputStream("C:\\马俊强\\testio.zip"));
         ZipEntry entry;
+        LineNumberReader reader = null;
         while ((entry = zipInputStream.getNextEntry()) != null) {
-            System.out.println(entry.getCompressedSize());
+            System.out.println(entry.getName());
+            reader = new LineNumberReader(new InputStreamReader(zipInputStream, "GBK")); //使用UTF-8解码，则出现乱码，为啥子？
+            String str1;
+            while ((str1 = reader.readLine()) != null) {
+                System.out.println(reader.getLineNumber() + "行：" + str1);
+            }
+            zipInputStream.closeEntry();
         }
+        if (null != reader) {
+            reader.close();
+        }
+        if (null != zipInputStream) {
+            zipInputStream.close();
+        }
+        //生成zip文件
+        ZipUtils.generateZipCompressedFile("C:\\马俊强\\学习资料\\需求", "C:\\马俊强\\学习资料\\majunqiang.zip");
         writer.close();
     }
+
+
 }
