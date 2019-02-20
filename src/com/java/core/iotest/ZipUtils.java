@@ -42,7 +42,7 @@ public class ZipUtils {
      * 将某文件夹下所有文件递归打包成zip
      *
      * @param file 待打包文件目录
-     * @throws FileNotFoundException 文件未找到时抛出FinleNotFoundException
+     * @throws FileNotFoundException 文件未找到时抛出FileNotFoundException
      */
     private static void recursionCompressFile(File file, ZipOutputStream zipOutputStream, String referenceFilePath) throws IOException {
         if (null == file || !file.exists())
