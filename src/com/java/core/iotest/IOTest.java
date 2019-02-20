@@ -73,7 +73,7 @@ public class IOTest {
         pushbackInputStream.read(bytes1); //重新读取数据,PushbackInputStream 缓冲区默认大小是1字节，可以在构造函数中指定缓冲区大小
         System.out.println(new String(bytes1));
         pushbackInputStream.close();
-        //如何回推一个double
+        //如何回推一个double值
         DataInputStream din = new DataInputStream(pushbackInputStream = new PushbackInputStream(new BufferedInputStream(new FileInputStream("C:\\马俊强\\testio.txt")), 1024));
         double d = din.readDouble();
         byte[] doubleAsBytes = new byte[8];
@@ -103,9 +103,7 @@ public class IOTest {
             zipInputStream.close();
         }
         //生成zip文件
-        ZipUtils.generateZipCompressedFile("C:\\马俊强\\学习资料\\需求", "C:\\马俊强\\学习资料\\majunqiang.zip");
+        ZipUtils.generateZipCompressedFile("C:\\马俊强\\软件安装", "C:\\马俊强\\majunqiang.zip");
         writer.close();
     }
-
-
 }

@@ -3,8 +3,8 @@ package com.java.core.iotest;
 
 import java.io.*;
 import java.util.Iterator;
-import java.util.Map;
 import java.util.jar.Attributes;
+import java.util.jar.JarEntry;
 import java.util.jar.JarInputStream;
 import java.util.jar.Manifest;
 import java.util.zip.ZipEntry;
@@ -125,18 +125,54 @@ public class ZipUtils {
     }
 
     /**
-     * 读取JAR文件
+     * 解压JAR文件
+     *
+     * @param srcFilePath        源文件路径
+     * @param decompressFilePath 生成的解压缩文件存放路径
      */
-    public static void readJARFile(String srcFilePath) throws FileNotFoundException {
-        if (null == srcFilePath || srcFilePath.length() < 1)
-            throw new IllegalArgumentException("srcFilePath can't be null.");
+    public static void readJARFile(String srcFilePath, String decompressFilePath) throws FileNotFoundException {
+        if (null == srcFilePath || srcFilePath.length() < 1 || null == decompressFilePath || decompressFilePath.length() < 1)
+            throw new IllegalArgumentException("srcFilePath | decompressFilePath can't be null.");
         File srcFile = new File(srcFilePath);
         if (!srcFile.exists()) throw new FileNotFoundException("srcFile not exists.");
+        File decompressFile = new File(decompressFilePath.concat(File.separator).concat(srcFile.getName()).concat("_decompress").concat(File.separator));
+        if (!decompressFile.exists()) decompressFile.mkdirs();
         try (JarInputStream jarInputStream = new JarInputStream(new BufferedInputStream(new FileInputStream(srcFile)))) {
             Manifest manifest = jarInputStream.getManifest();
-            Map<String, Attributes> map = manifest.getEntries();
-            for (Iterator<Map.Entry<String, Attributes>> iterator = map.entrySet().iterator(); iterator.hasNext(); ) {
-                System.out.println(iterator.next().getKey() + ":" + iterator.next().getValue().toString());
+            Attributes attributes = manifest.getMainAttributes();
+            //创建清单文件
+            File mfFileDir = new File(decompressFile.getAbsolutePath().concat(File.separator).concat("META-INF").concat(File.separator));
+            if (!mfFileDir.exists()) mfFileDir.mkdirs();
+            File mfFile = new File(mfFileDir.getAbsolutePath().concat(File.separator).concat("MANIFEST.MF"));
+            if (!mfFile.exists()) mfFile.createNewFile();
+            try (BufferedWriter bufferedWriter = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(mfFile)))) {
+                for (Iterator<Object> iterator = attributes.keySet().iterator(); iterator.hasNext(); ) {
+                    Attributes.Name key = (Attributes.Name) iterator.next();
+                    Object value = attributes.get(key);
+                    bufferedWriter.append(key.toString()).append(":");
+                    bufferedWriter.append(" ").append(value.toString()).append("\r\n");
+                }
+            }
+            JarEntry entry;
+            while ((entry = jarInputStream.getNextJarEntry()) != null) {
+                String subPath = entry.getName();
+                String descPath = decompressFile.getAbsolutePath().concat(File.separator).concat(subPath.replace("/", File.separator));
+                File file = new File(descPath);
+                if (descPath.endsWith(File.separator)) {
+                    if (!file.exists()) file.mkdirs();
+                } else {
+                    File tempFile = new File(descPath.substring(0, descPath.lastIndexOf(File.separator)));
+                    if (!tempFile.exists()) tempFile.mkdirs();
+                    if (!file.exists()) file.createNewFile();
+                    try (BufferedOutputStream bufferedOutputStream = new BufferedOutputStream(new FileOutputStream(file))) {
+                        byte[] bytes = new byte[1024];
+                        int len;
+                        while ((len = jarInputStream.read(bytes)) > -1) {
+                            bufferedOutputStream.write(bytes, 0, len);
+                        }
+                    }
+                }
+                jarInputStream.closeEntry();
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -145,6 +181,6 @@ public class ZipUtils {
 
     public static void main(String[] args) throws FileNotFoundException {
         //unzipFile("C:\\马俊强\\学习资料\\majunqiang.zip", "C:\\马俊强\\学习资料\\majunqiangunzip\\");
-        readJARFile("C:\\马俊强\\commons-collections-3.2.1.jar");
+        //readJARFile("C:\\马俊强\\commons-collections-3.2.1.jar", "C:\\马俊强\\");
     }
 }
