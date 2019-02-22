@@ -15,13 +15,13 @@ import java.util.concurrent.*;
  * newSingleThreadExecutor 单线程线程池，所有提交的任务顺序执行
  * newScheduledThreadPool 预定执行任务的固定线程池
  * newSingleThreadScheduledExecutor 预定执行任务的单线程池
- *
+ * <p>
  * shutdown()
  * shutdownNow() 取消所有任务
  * invokeAny()
  * invokeAll()
  * 使用ExecutorCompletionService 来组织任务的排列集合
- *
+ * <p>
  * Fork-Join框架实现并行计算 RecursiveTask<V> compute() 实现
  *
  * @author Mr.X

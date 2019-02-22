@@ -60,6 +60,7 @@ public class Bank_Lock {
 
     /**
      * 获取银行所有账户总余额
+     *
      * @return 银行所有账户总余额
      */
     public double getTotalBalance() {
