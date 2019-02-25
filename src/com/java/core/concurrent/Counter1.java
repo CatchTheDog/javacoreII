@@ -33,7 +33,7 @@ public class Counter1 {
         return this.value;
     }
 
-    public long increment() {
+    public synchronized long increment() {
         if (value == Long.MAX_VALUE)
             throw new IllegalArgumentException("count overflow .");
         return ++value;
