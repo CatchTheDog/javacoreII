@@ -1,8 +1,0 @@
-流的约简（终结）操作：
-    Optional<T> max(Comparator<? super T> comparator)
-    Optional<T> min(Comparator<? super T> comparator)
-    Optional<T> findFirst()
-    Optional<T> findAny()
-    boolean anyMath(Predicate<? super T> predicate)
-    boolean allMath(Predicate<? super T> predicate)
-    boolean noneMath(Predicate<? super T> predicate)
