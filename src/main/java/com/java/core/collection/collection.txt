@@ -1,0 +1,331 @@
+Java集合类库将接口与实现分离；
+1..队列（Queue）可以在队列的尾部添加元素，在队列的头部删除元素，并且可以查找队列中元素的个数；当需要按照“先进先出”的规则检索对象时就应该使用队列。
+    队列通常有两种实现方式：
+    a.使用循环数组
+    b.使用链表
+2.Collection接口有两个方法
+        int size()
+        boolean isEmpty()
+        boolean contains(Object obj);
+        boolean containsAll(Collection<?> c);
+        boolean equals(Object o);
+        boolean addAll(Collection<? extends E> c);
+        boolean remove(Object obj);
+        boolean removeAll(Collection<?> c);
+        void clear();
+        boolean retainAll(Collection<?> c);
+        Object [] toArray();
+        <T> T [] toArray(T[] arrayToFill);
+        boolean add(Object obj);
+        Iterator<E> iterator();
+
+3.迭代器Iterator
+          hasNext 检测是否有后续元素
+          next   返回指针刚刚越过的元素——指针前面第一个元素
+          remove 删除上次调用next方法时返回的元素 对next方法和remove方法的调用具有相互依赖性，若在调用remove之前没有调用next,则抛出IllegalStateException异常。
+4.List接口
+    void add(int index, E element)
+    void remove(int index)
+    E get(int index)
+    E set(int index, E element)
+5.ListIterator接口是Iterator子接口 定义了一个用于在迭代器位置前面增加一个元素：
+    void add(E element);
+注：两种有序集合，数组实现和链表实现：
+                数组实现支持随机访问
+                链表实现不支持随机访问，随机访问需要从第一个元素开始访问，所以效率很低。
+6.Set接口等同于Collection接口，但行为更严谨。不允许增加重复元素
+7.SortedSet和SortedMap接口会提供用于排序的比较器对象，定义了可以得到集合子集视图的方法；
+8.NavigableSet和NavigableMap中包含一些用于搜索和遍历有序集合和映射的方法  TreeSet 和 TreeMap实现了这些接口。
+
+具体集合：
+类名称以Map结尾的类都实现了Map接口，而其他类都实现了Collection接口。
+ArrayList       一种可以动态增长和缩减的索引序列
+LinkedList      一种可以在任何位置进行高效地插人和删除操作的有序序列
+ArrayDeque      一种用循环数组实现的双端队列
+HashSet         一种没有重复元素的无序集合
+TreeSet         —种有序集
+EnumSet         一种包含枚举类型值的集
+LinkedHashSet   一种可以记住元素插人次序的集
+PriorityQueue   一种允许高效删除最小元素的集合
+HashMap         一种存储键 / 值关联的数据结构
+TreeMap         —种键值有序排列的映射表
+EnumMap         一种键值属于枚举类型的映射表
+LinkedHashMap   一种可以记住键 / 值项添加次序的映射表
+WeakHashMap     一种其值无用武之地后可以被垃圾回收器回收的映射表
+IdentityHashMap 一种用 == 而不是用 equals 比较键值的映射表
+
+集合：
+1.链表
+    数组与数组列表缺陷：在数组中间删除或者增加一个元素，代价很大；
+    链表：在链表中间删除或者增加元素操作效率很高；
+    Java中的所有链表实际都是双向链表。
+    链表是有序集合，add方法只会将元素添加到链表尾部；Iterator方法未提供add方法用于在迭代器指针处插入元素（在链表中间插入元素），类库Iterator的子接口ListIterator
+ 提供了add方法,用于在迭代器位置之前添加元素，此外该接口还提供了而两个方法用于反向遍历链表。
+    E previous();
+    boolean hasPrevious();
+    void add(E e);
+    remove 方法会删除迭代器指针前面的元素；如果是正向遍历，则会删除迭代器左侧的元素；如果是反向遍历，会删除迭代器右侧的元素。
+    set 方法用一个新元素取代调用next或previous方法返回的上一个元素；
+        如果迭代器发现它的集合的结构被修改了，则会抛出ConcurrentModificationException异常（remove,add操作输入结构改变，但是set方法不属于结构改变）；
+    get 链表不支持随机访问链表中的元素，所以get(n)方法会从头遍历链表，直到到达索引位置；因此，如果需要随机访问集合元素，则不选用链表。
+    nextIndex 方法返回下一次调用next方法时返回元素的索引
+    previousIndex  方法返回下一次调用previous 方法时返回元素的索引
+    list.listIterator(n) 将返回一个迭代器，这个迭代器指向索引为n的元素前面的位置——调用next返回的元素就是list.get(n)所获得的元素。
+    总结：1.使用链表的唯一理由是：需要对集合中的元素进行大量的增加和删除。
+          2.应该避免在链表中使用随机访问。如果需要这样做，则应该使用ArrayList.
+ 2.数组列表
+    ArrayList支持高效随机访问，其封装了一个动态再分配的对象数组；
+    Vector 也是动态数组，但是其所有方法都是同步的，在多线程情况下是安全的；但是如果是在单线程情况下使用，则效率会很低。ArrayList在不需要同步时使用。
+ 3.散列集
+    散列集无序存储元素，支持高效查找。
+    在Java中，散列表使用链表数组实现，每个列表都被称为桶。在查找元素时，首先计算其散列码，再与桶的总数取余，所得结果即为保存次元素的桶的索引。如果桶中已经存在元素，则出现散列冲突。
+    如果散列码是合理且随机分布的，而且桶的数目足够大，则发生散列冲突的概率较小。
+    在Java8中，桶满时会从链表变为平衡二叉树，以提高散列冲突情况下的操作效率。
+    散列初始化参数：1.桶数   一般设置为预计元素个数的75%-150%  最好设置为一个素数，防止键的集聚。标准类库使用桶数为2的幂，默认值为16，提供的任何值都会自动转为2的下一个幂。
+                  2.装填因子  如果散列表快满，则需要对散列表进行再散列——创建一个新的更大的散列表，将所有元素插入到新表中，丢弃原来的表；装填因子决定在散列表容量达到多满时进行再散列，
+                  默认值是0.75，在表内元素个数达到桶数的75%时，进行双倍桶数自动扩展。
+    在不关心元素顺序，但是需要高效查找时，可以使用散列表——HashSet
+ 4.树集
+    树集是有序的不允许插入重复元素的集合，在元素插入后会自动排序。树集的插入操作要比散列集效率低。
+    如果不关心元素顺序，使用散列集即可；如果关心元素顺序，则需要使用树集。
+ 5.队列与双端队列
+    队列允许在尾部添加元素，在头部删除元素（先进先出FIFO）；而有两个端头（头部和尾部均支持添加和删除元素操作）的队列，则称为双端队列。队列不支持在中间插入元素。
+    ArrayDeque与LinkedList实现Deque(双端队列)。
+    队列操作方法：
+
+        add    IllegalStateException
+        offer
+
+        remove  NoSuchElementException
+        poll
+
+        element  NoSuchElementException
+        peek
+ 6.优先级队列
+    优先级队列中的元素可以按照任意顺序插入，但总是按照排序的顺序进行检索。调用remove方法，总会获得当前优先级队列中最小的元素。优先级队列使用了堆来存储数据。
+    使用优先级队列的典型场景是任务调度。
+ 映射：
+ HashMap与TreeMap都实现了Map接口。散列映射对键进行散列，树映射用键的整体顺序对元素进行排序，并将其组织成搜索树。散列或比较函数只能作用于键，与键关联的值不能进行散列或比较。
+ 与集合一样，散列较快，但无序；树较慢，但有序。
+ 键必须唯一，同一个键只能对应一个值，如果同时对一个键进行两次put操作，第一个值会被第二个值覆盖，put方法将会返回上一个值。
+ 基本操作：
+    get(key)
+    getOrDefault(key,defaultValue) 可用于如果键不存在是设置值的默认值。
+    put(key,value);
+    remove(key);
+    size()
+    putAll()
+    containsKey()
+    containsValue()
+    forEach()
+  TreeMap:
+    K firstKey() 返回最小元素
+    K lastKey() 返回最大元素
+  更新映射项：
+    a.counts.put(word,counts.getOrDefault(word,0)+1);
+    b.counts.putIfAbsent(word,0);  counts.put(word,counts.get(word) + 1);
+    c.counts.merge(word,1,Integer::sum);
+    有如下方法可以用于更新映射项：
+        • default V merge(K key, V value, BiFunction<? super V,? super V,?
+        extends V> remappingFunctlon)8
+            如果 key 与一个非 null 值 v 关联， 将函数应用到 v 和 value, 将 key 与结果关联， 或
+            者如果结果为 null, 则删除这个键。否则， 将 key 与 value 关联， 返回 get(key。)
+        • default V compute(K key, BiFunction<? super K,? super V,? extends V>
+        remappingFunction)
+            将函数应用到 key 和 get(key。) 将 key 与结果关联， 或者如果结果为 mill， 则删除这
+            个键。返回 get(key。)
+        •default V computeIfPresent(K key , BiFunction<? super K , ? super V , ?
+        extends V > remappingFunction ) 8
+            如果 key 与一个非 null 值 v 关联， 将函数应用到 key 和 v， 将 key 与结果关联， 或者
+            如果结果为 null, 则删除这个键。返回 get(key。)
+        •default V computeIfAbsent( K key , Function<? super K ,? extends V >
+        mappingFunction ) 8
+            将函数应用到 key, 除非 key 与一个非 null 值关联。将 key 与结果关联， 或者如果结
+            果为 null, 则删除这个键。返回 get(key。)
+        •default void replaceAll( BiFunction<? super K ,? super V ,? extends
+        V > function ) 8
+            在所有映射项上应用函数。将键与非null结果关联， 对于 null 结果， 则将相应的键
+            删除。
+  映射视图：
+      集合框架不认为映射本身是一个集合，不过可以得到映射的视图——实现了Collection接口或某个子接口的对象。
+      有3种视图：键集，值集合（不是一个集）以及键/值对集：
+          Set<K> keySet()
+          Collection<V> values()
+          Set<Map.Entry<K,V>> entrySet()
+  弱散列映射：
+    WeakHashMap的设计是为了解决：在程序中没有任何地方使用key时，无法使用程序删除该键值对的问题。使用WeakHashMap后，集合中的元素，如果其key没有在任何地方被使用一段时间后，集合会自动删除该键值对。
+    WeakHashMap使用弱引用保存键，由WeakHashMap定期清理不再使用的条目。
+  链接散列集与映射：
+    LinkedHashSet 和 LinkedHashMap类可以记录元素插入的顺序。当条目插入时，就会自动并入到双向链表中。 有序（插入顺序/访问顺序）散列。
+  枚举集与映射：
+   EnumSet是一个枚举类型元素集的实现，内部使用位序列实现，如果对应的值在集中，则相应的位被置为1，需要使用静态工厂创建EnumSet。
+   EnumMap是一个键类型为枚举类型的映射，可以高效实现一个值数组。需要在构造器中指定键类型。
+  标识散列映射：
+    类IdentityHashMap中，键的三劣质不用hashCode函数计算，而是使用System.indentityHashCode方法计算，此方法也是Object.hashCode方法根据对象额内存地址来计算散列码所使用的方式。
+    而且，在对对象进行比较时，IdentityHashMap类使用==而不是使用equals方法——不同的键对象，即使内容相同，也被视为不同的对象。在实现对象遍历算法时，此类非常有用，可以用来跟踪每个对象的遍历情况。
+  视图技术：
+    1.集合包装器
+    Arrays的静态方法asList将返回一个包装了数组的List包装器。
+    Collections.nCopies(n,anObject); 返回一个实现了List接口的不可修改的对象。
+    Collections.singleton(anObject); 返回一个视图对象，此对象实现了Set接口，返回的对象实现了一个不可修改的单元素集。
+    类似的，对集合框架中的每个接口，还有一些方法可以生成空集，列表，映射等。
+    Set<String> deepThoughts = Collections.emptySet();
+    2.子范围
+    可以为很多集合建立子范围视图。
+    List group2 = staff.subLsit(10,20);//第一个索引元素包含在内，而第二个索引元素则不包含。
+    group2.clear();//清空group2,同时从staff集合中删除了group2中所包含的元素。
+    对于有序集合映射，可以使用排序顺序建立子范围。SortedSet接口中声明了如下三个方法：
+    SortedSet<E> subSet(E from,E to);
+    SortedSet< E> headSet(E to)
+    SortedSet< E> tail Set(E from)
+    NavigableSet接口可以指定是否包含边界：
+        NavigableSet<E> subSet ( E from, boolean fromlnclusive, E to, boolean tolnclusive)
+        NavigableSet<E> headSet(E to, boolean tolnclusive)
+        Navigab1eSet<E> tail Set(E from, boolean fromlnclusive)
+   3.不可修改的视图
+     如下八个方法产生不可修改的视图：
+     Collections.unmodifiableCollection   返回一个集合，equals方法不调用底层集合的equals方法，而是使用Object类的equals方法。
+     Collections.unmodifiableList
+     Collections.unmodifiableSet
+     Collections.unmodifiableSortedSet
+     Collections.unmodifiableNavigableSet
+     Collections.unmodifiableMap
+     Collections.unmodifiableSortedMap
+     Collections.unmodifiableNavigableMap
+   4.同步视图
+     类库设计者使用视图机制来确保常规集合的线程安全。例如：Collections.synchronizedMap方法可以将一个映射表转换成具有同步访问的Map.
+     Map<String,Employee> map = Collections.synchronizedMap(new HashMap<String,Employee>());
+   5.受查视图
+    "受查"视图用来对泛型类型发生问题时提供调试支持。
+    List<String> safeStrings = Collections.checkedList(strings,String.class);//如果向该集合中添加类型不为String.class的对象，则抛出异常ClassCastException
+   6.视图限制
+    通常视图只读，不可改变大小，只支持删除，不支持插入。
+  算法：
+    1.排序和混排
+    Collections.sort(staff);
+    staff.sort(Comparator.comparingDouble(Employee::getSalary));
+    Collections.reverseOrder()
+    staff.sort(Comparator.reversOrder());
+    staff.sort(Comparator.comparingDouble(Employee::getSalary).reversed());
+            方法可以对实现了List接口的集合进行排序。(java使用归并排序，比快速排序要慢，但是稳定。)
+    Collections.shuffle(staff,random r) 用于随机混排列表
+
+    2.二分查找
+    int i = Collections.binarySearch(c,element,comparator) 方法用于二分查找
+        如果返回值大于等于0，则表示元素所在位置索引；
+        如果返回值小于0，则表示元素不存在；可以根据返回值计算元素应该插入的位置 insertionPoint = -i - 1;  可以保证插入元素后列表仍然有序。
+        只有使用随机访问，二分查找才能发挥优势；所以，链表使用二分查找仍然是线性查找。
+    3.简单算法
+      java.util.Collections
+      • static <T extends Comparab1e<? super T>> T min(Collection<T> elements )
+      • static <T extends Comparable<? super T>> T max(Col 1ection<T> elements)
+      • static <T> min( Col 1ection<T> elements, Comparator ? super T> c )
+      • static <T> max( Col 1ection<T> elements, Comparator ? super T> c )
+            返回集合中最小的或最大的元素（为清楚起见， 参数的边界被简化了）。
+      • static <T> void copy(List<? super T> to, List<T> from)
+            将原列表中的所有元素复制到目辱列表的相应位1上。目标列表的长度至少与原列表一样。
+      • static <T> void fi11(List<? super T> 1， T value)
+            将列表中所有位置设置为相同的值。
+      • static <T> boolean addAl 1(Collection<? super T> c, T. .. values ) 5.0
+            将所有的值添加到集合中。 如果集合改变了， 则返回 tme。
+      • static <T> boolean replaceAl 1(List<T> 1, T oldValue, T newValue) 1.4
+            用 newValue 取代所有值为 oldValue 的元素。
+      • static int indexOfSubList(List<?> 1, List<?> s ) 1.4
+      • static int 1astlndexOfSubList(List<?> 1, List<?> s ) 1.4
+            返回 1 中第一个或最后一个等于 S 子列表的索引。如果 1 中不存在等于 S 的子列表， 则
+            返回-1。例如， 1 为[s,，t a，r] , s 为[t, a, r], 两个方法都将返回索引 1。
+      • static void swap(List<?> 1, int i, int j) 1.4
+            交换给定偏移量的两个元素。
+      • static void reverse(List<?> 1)
+          逆置列表中元素的顺序。例如， 逆置列表 [，t a, r] 后将得到列表 [r, a, t。] 这个方法的时
+          间复杂度为 O (n，) ri 为列表的长度。
+      • static void rotate(List<?> 1, int d) 1.4
+          旋转列表中的元素， 将索引 i 的条目移动到位置（i + d) % l.size() 0 例如， 将列表 [，t a,
+          r] 旋转移 2 个位置后得到 [a,，r t。] 这个方法的时间复杂度为 O(n), n 为列表的长度。
+      • static int frequency(Col 1ection<?> c, Object o) 5.0
+        返回 c 中与对象 o 相同的元素个数。
+      • boolean disjoint(Collection<?> cl, Col 1ection<?> c2 ) 5.0
+          如果两个集合没有共同的元素， 则返回 true。
+      java.util.Collection<T> 1.2
+      • default boolean removeIf(Predicate<? super E> filter ) 8
+        删除所有匹配的元素。
+      java.util.List<E> 1.2
+      • default void replaceAl 1(UnaryOperator<E> op) 8
+        对这个列表的所有元素应用这个操作。
+     4.批量操作
+         removeAll
+         retainAll
+         allAll
+         clear()
+     5.集合与数组转换
+      Arrays.asList();
+      staff.toArray(new String [staff.size()])
+     6.编写自己的算法
+        尽可能依赖接口而不是依赖具体实现。
+        使用视图技术。
+   遗留的集合
+    HashTable   与HashMap作用一样，与Vector类的方法一样。HashTable方法时同步的。如果不需要考虑同步，使用HashMap;如果需要并发访问，使用ConcurrentHashMap
+        keys()
+        elements()
+    Enumeration
+        hasMoreElements
+        nextElements
+    Vector
+        elements()
+    属性映射（Properties）是一个类型非常特殊的映射结构，有以下三种特性：
+        1.键和值都是字符串
+        2.表可以保存到一个文件中，也可以从文件中加载
+        3.使用一个默认的辅助表
+      通常用于程序的特殊配置选项
+        • Properties()
+            创建一个空的属性映射。
+        • Properties(Properties defaults)
+            创建一个带有一组默认值的空的属性映射。
+        • String getProperty(String key)
+            获得属性的对应关系；返回与键对应的字符串。 如果在映射中不存在， 返回默认表中
+            与这个键对应的字符串。
+        • String getProperty(String key, String defaultValue)
+            获得在键没有找到时具有的默认值属性；它将返回与键对应的字符串，如果在映射中
+            不存在，就返回默认的字符串。
+        • void 1 oad(InputStream in)
+            从 InputStream 加载属性映射。
+        • void store(OutputStream out, String commentstring)
+            把属性映射存储到 OutputStream。
+    栈
+        • E push(E item)
+        将 item 压人桟并返回 item。
+        • E pop()
+        弹出并返回栈顶的 item。 如果栈为空，请不要调用这个方法。
+        • E peek()
+        返回栈顶元素，但不弹出。 如果栈为空， 请不要调用这个方法。
+    位集
+        BitSet 用于存放一个位序列（不是一个集合，称为位向量或者位数组更合适）。若需要高效存储序列（标识）就可以使用位集。位集使用字节存储，所以比Bollean对象和ArrayList高效。
+        • BitSet( int initialCapacity)
+            创建一个位集。
+        • int length( )
+            返回位集的“ 逻辑长度”， 即 1 加上位集的最高设置位的索引。
+        • boolean get(int bit )
+            获得一个位。
+        • void set(int bit )
+            设置一个位。
+        • void clear(int bit )
+            清除一个位。
+        • void and( BitSet set )
+            这个位集与另一个位集进行逻辑“ AND”。
+        • void or(BitSet set )
+            这个位集与另一个位集进行逻辑“ OR”。
+        • void xor(BitSet set )
+            这个位集与另一个位集进行逻辑“ X0R”。
+        • void andNot(BitSet set )
+            清除这个位集中对应另一个位集中设置的所有位。
+
+
+
+
+
+
+
+
+
+
+

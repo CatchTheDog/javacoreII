@@ -1,0 +1,11 @@
+1.何时使用代理
+    有一表示接口的Class对象，其确切类型在编译时无法知晓，需要在运行时动态生成一个实现此接口的类的对象，此时就可以使用代理机制。
+    代理机制产生的新类有以下方法：
+        指定接口所需要的全部方法；
+        Object类中的全部方法。
+2.如何创建代理对象
+    InvocationHandler
+        Object invoke(Object proxy,Method method,Object [] args)
+    实现了上述接口的类称为调用处理器。
+    Proxy
+        newProxyInstance(ClassLoader classLoader,Class [] interfaces, InvocationHandler handlers)

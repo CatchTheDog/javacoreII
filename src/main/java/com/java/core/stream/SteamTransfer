@@ -1,0 +1,11 @@
+流的转换：
+    1.Stream<T> filter(Predicate<? super T> predicate)
+    2.<R> Stream <R> map(Function<? super T,? extends R> mapper)
+    3.<R> Stream<R> flatMap(Function<? super T,? extends Stream<? extends R> mapper)
+    4.Stream<T> limit(long maxSize)
+    5.Stream<T> skip(long n)
+    6.static <T> Steam<T> concat(Stream<? stream T> a,Stream<? extends T> b)
+    7.Stream<T> disinct()
+    8.Stream<T> sorted()
+    9.Stream<T> sorted(Comparator<? super T> comparator)
+    10.Stream<T> peek(Consumer<? super T> action)
